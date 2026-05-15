@@ -1,0 +1,30 @@
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-6">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: "#{recording_label}: #{recording_summary}",
+    subtitle: "Resolved from the current workspace root.",
+    variant: :h1
+  ) %>
+
+  <%= render FlatPack::Card::Component.new(style: :default) do |card| %>
+    <% card.body do %>
+      <dl class="grid gap-4 text-sm sm:grid-cols-2">
+        <div>
+          <dt class="font-semibold">Workspace</dt>
+          <dd><%= current_workspace.name %></dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Role</dt>
+          <dd><%= current_workspace_entry.fetch(:role).to_s.humanize %></dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Recordable type</dt>
+          <dd><%= @recording.recordable_type %></dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Recording id</dt>
+          <dd><%= @recording.id %></dd>
+        </div>
+      </dl>
+    <% end %>
+  <% end %>
+</div>

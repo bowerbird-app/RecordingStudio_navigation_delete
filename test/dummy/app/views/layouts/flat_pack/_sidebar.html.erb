@@ -2,55 +2,54 @@
   <% sidebar.header do %>
     <%= render FlatPack::Sidebar::Header::Component.new(
       brand_abbr: "RS",
-      title: "Addon Template",
-      subtitle: "Recording Studio"
+      title: "Navigation demo",
+      subtitle: current_workspace&.name || "Recording Studio"
     ) %>
   <% end %>
 
   <% sidebar.items do %>
-    <nav class="py-4 space-y-1" aria-label="Main navigation">
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Home",
-        href: root_path,
-        icon: :home
-      ) %>
+    <nav class="py-4 space-y-6" aria-label="Main navigation">
+      <div class="space-y-1">
+        <p class="px-3 text-xs font-semibold uppercase tracking-wide text-[var(--surface-muted-content-color)]">
+          Workspaces
+        </p>
 
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Install",
-        href: docs_install_path,
-        icon: :arrow_down_tray
-      ) %>
+        <% available_workspaces.each do |workspace_entry| %>
+          <% workspace = workspace_entry.fetch(:workspace) %>
+          <% role = workspace_entry.fetch(:role).to_s.humanize %>
+          <%= render FlatPack::Sidebar::Item::Component.new(
+            label: "#{workspace.name} (#{role})",
+            href: workspace_path(workspace),
+            icon: :folder
+          ) %>
+        <% end %>
+      </div>
 
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Config",
-        href: docs_config_path,
-        icon: :settings
-      ) %>
+        <% if current_root_recording.present? %>
+          <% navigation_context.sections.each do |section| %>
+            <div class="space-y-1">
+              <p class="px-3 text-xs font-semibold uppercase tracking-wide text-[var(--surface-muted-content-color)]">
+                <%= section.label %>
+              </p>
 
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Recordable types",
-        href: docs_recordable_types_path,
-        icon: :queue_list
-      ) %>
+              <% section.groups.each do |group| %>
+                <div class="space-y-1">
+                  <p class="px-3 text-[11px] font-medium uppercase tracking-wide text-[var(--surface-muted-content-color)]/80">
+                    <%= group.label %>
+                  </p>
 
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Recordings tree",
-        href: docs_recordings_tree_path,
-        icon: :folder
-      ) %>
-
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Gem Views",
-        href: docs_gem_views_path,
-        icon: :eye
-      ) %>
-
-      <%= render FlatPack::Sidebar::Item::Component.new(
-        label: "Methods",
-        href: docs_methods_path,
-        icon: :code_bracket
-      ) %>
-
+                  <% group.items.each do |item| %>
+                    <%= render FlatPack::Sidebar::Item::Component.new(
+                      label: item.label,
+                      href: item.href,
+                      icon: item.icon
+                    ) %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
     </nav>
   <% end %>
 

@@ -1,0 +1,21 @@
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-6">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: "Access overview",
+    subtitle: current_workspace.name,
+    variant: :h1
+  ) %>
+
+  <%= render FlatPack::Card::Component.new(style: :default) do |card| %>
+    <% card.body do %>
+      <ul class="space-y-3 text-sm">
+        <% @accesses.each do |access| %>
+          <li>
+            <strong><%= access.actor.try(:email) || access.actor_id %></strong>
+            —
+            <%= access.role.to_s.humanize %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</div>

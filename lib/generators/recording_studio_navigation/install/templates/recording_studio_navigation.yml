@@ -1,0 +1,2 @@
+development:
+  note: "RecordingStudioNavigation is configured through config/initializers/recording_studio_navigation.rb"

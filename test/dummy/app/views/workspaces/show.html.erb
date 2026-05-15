@@ -1,0 +1,76 @@
+<div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: current_workspace.name,
+    subtitle: "Current role: #{current_workspace_entry.fetch(:role).to_s.humanize}",
+    variant: :h1
+  ) %>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <%= render FlatPack::Card::Component.new(style: :default) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "Visible navigation",
+          subtitle: "Composed from items, groups, sections, and contributions.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <div class="space-y-4 text-sm">
+          <% @sections.each do |section| %>
+            <div>
+              <h2 class="font-semibold"><%= section.label %></h2>
+              <div class="mt-2 space-y-3">
+                <% section.groups.each do |group| %>
+                  <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wide text-[var(--surface-muted-content-color)]">
+                      <%= group.label %>
+                    </h3>
+
+                    <ul class="mt-2 space-y-2">
+                      <% group.items.each do |item| %>
+                        <li>
+                          <a href="<%= item.href %>" class="underline"><%= item.label %></a>
+                          <% if item.description.present? %>
+                            <span class="block text-[var(--surface-muted-content-color)]"><%= item.description %></span>
+                          <% end %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= render FlatPack::Card::Component.new(style: :outlined) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "Tree-backed destinations",
+          subtitle: "Only destinations visible in this root and for this actor appear here.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <ul class="space-y-2 text-sm">
+          <% @tree_backed_items.each do |item| %>
+            <% recording = item.metadata[:recording] %>
+            <li>
+              <a href="<%= item.href %>" class="underline"><%= item.label %></a>
+              <span class="block text-[var(--surface-muted-content-color)]">
+                <strong><%= recording.recordable_type.demodulize %>:</strong>
+                <%= recording.recordable.try(:name).presence || recording.recordable.try(:title).presence || recording.recordable.id %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  </div>
+</div>

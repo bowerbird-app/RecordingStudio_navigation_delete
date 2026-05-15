@@ -1,0 +1,92 @@
+<div class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-12">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: "RecordingStudioNavigation",
+    subtitle: "Compose sidebar and quick-link navigation from Recording Studio roots and access records.",
+    variant: :h1
+  ) %>
+
+  <div class="flex flex-wrap gap-2">
+    <%= render FlatPack::Badge::Component.new(text: "Registry-backed", style: :success, size: :sm) %>
+    <%= render FlatPack::Badge::Component.new(text: "Root-aware", style: :info, size: :sm) %>
+    <%= render FlatPack::Badge::Component.new(text: "FlatPack-ready", style: :warning, size: :sm) %>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <%= render FlatPack::Card::Component.new(style: :default) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "What the gem provides",
+          subtitle: "Navigation definitions stay centralized and composable.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <ul class="space-y-3 text-sm leading-6">
+          <li>Register reusable navigation items once and reference them from groups.</li>
+          <li>Compose sections with deterministic contribution overrides by key.</li>
+          <li>Resolve tree-backed links against the current Recording Studio root.</li>
+          <li>Query visible quick links without duplicating authorization logic.</li>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <%= render FlatPack::Card::Component.new(style: :outlined) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "Host app integration",
+          subtitle: "Wire the gem into the current actor and root you already expose.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <ol class="space-y-3 text-sm leading-6 list-decimal pl-5">
+          <li>Pass <code>Current.actor</code> and the current root recording into a navigation context.</li>
+          <li>Register sidebar sections in a host-app initializer with explicit quick-link opt-in.</li>
+          <li>Use visibility lambdas that consult Recording Studio access roles.</li>
+          <li>Render the composed sections in your FlatPack sidebar and top-nav search.</li>
+        </ol>
+      <% end %>
+    <% end %>
+
+    <%= render FlatPack::Card::Component.new(style: :outlined) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "Dummy app demo",
+          subtitle: "The repository includes two workspaces with different access levels.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <p class="text-sm leading-6 text-(--surface-content-color)">
+          Use the dummy app to see the same item registry render different links for different roots and actors while keeping the definitions shared.
+        </p>
+      <% end %>
+    <% end %>
+
+    <%= render FlatPack::Card::Component.new(style: :default) do |card| %>
+      <% card.header do %>
+        <%= render FlatPack::PageTitle::Component.new(
+          title: "Install flow",
+          subtitle: "What the generator gives the host app.",
+          variant: :h3,
+          class: "mb-0 pb-0"
+        ) %>
+      <% end %>
+
+      <% card.body do %>
+        <ul class="space-y-3 text-sm leading-6">
+          <li>Add the gem to your host app and run <code>bundle install</code>.</li>
+          <li>Run <code>rails generate recording_studio_navigation:install</code>.</li>
+          <li>Review the generated initializer and connect it to your root-aware routes.</li>
+          <li>Rebuild CSS with <code>bin/rails tailwindcss:build</code> when needed.</li>
+        </ul>
+      <% end %>
+    <% end %>
+  </div>
+</div>

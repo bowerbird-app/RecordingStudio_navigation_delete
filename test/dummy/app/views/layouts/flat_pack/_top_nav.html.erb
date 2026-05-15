@@ -5,7 +5,7 @@
       icon_only: true,
       style: :ghost,
       size: :md,
-      aria: {label: "Toggle sidebar"},
+      aria: { label: "Toggle sidebar" },
       data: {
         "flat-pack--sidebar-layout-target": "mobileToggle",
         action: "click->flat-pack--sidebar-layout#toggleMobile"
@@ -13,10 +13,54 @@
       class: "md:hidden"
     ) %>
 
+    <% if current_workspace_entry.present? %>
+      <%= render FlatPack::Badge::Component.new(
+        text: current_workspace_entry.fetch(:role).to_s.humanize,
+        style: :info,
+        size: :sm
+      ) %>
+    <% end %>
   <% end %>
 
   <% nav.center do %>
-    <span aria-hidden="true"></span>
+    <% if current_workspace.present? %>
+      <div class="w-full max-w-xl">
+        <%= form_with url: workspace_path(current_workspace), method: :get, class: "w-full" do %>
+          <label class="sr-only" for="workspace-quick-link-query">Quick link search</label>
+          <input
+            id="workspace-quick-link-query"
+            type="search"
+            name="q"
+            value="<%= params[:q] %>"
+            placeholder="Search quick links"
+            class="w-full rounded-lg border border-[var(--surface-border-color)] bg-[var(--surface-raised-background-color)] px-3 py-2 text-sm text-[var(--surface-content-color)]"
+          >
+        <% end %>
+
+        <% if params[:q].present? %>
+          <div class="mt-2 rounded-lg border border-[var(--surface-border-color)] bg-[var(--surface-raised-background-color)] p-2 shadow-sm">
+            <% if quick_links.any? %>
+              <ul class="space-y-1">
+                <% quick_links.each do |item| %>
+                  <li>
+                    <a href="<%= item.href %>" class="block rounded-md px-3 py-2 text-sm hover:bg-[var(--surface-hover-background-color)]">
+                      <span class="font-medium"><%= item.label %></span>
+                      <% if item.description.present? %>
+                        <span class="block text-xs text-[var(--surface-muted-content-color)]"><%= item.description %></span>
+                      <% end %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="px-3 py-2 text-sm text-[var(--surface-muted-content-color)]">No quick links match “<%= params[:q] %>”.</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <span aria-hidden="true"></span>
+    <% end %>
   <% end %>
 
   <% nav.right do %>
